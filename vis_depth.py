@@ -20,9 +20,9 @@ if __name__ == '__main__':
 
     import argparse
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--img', required=True,
+    parser.add_argument('--img',
                         help='Image texture in equirectangular format')
-    parser.add_argument('--depth', required=True,
+    parser.add_argument('--depth',
                         help='Depth map')
     parser.add_argument('--scale', default=0.001, type=float,
                         help='Rescale the depth map')

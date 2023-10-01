@@ -8,6 +8,7 @@ import torch.nn.functional as F
 from typing import Optional, List, Callable, Tuple
 from torchrl.modules import MLP
 
+
 try:
     from flash_attn.modules.mha import FlashCrossAttention
 except ModuleNotFoundError:
@@ -290,6 +291,10 @@ class MatchAssignment(nn.Module):
 
     def forward(self, desc0: torch.Tensor, desc1: torch.Tensor):
         """ build assignment matrix from descriptors """
+        
+        print('desc0_shape: ',desc0.shape)
+        print('dim: ',self.dim)
+
         mdesc0, mdesc1 = self.final_proj(desc0), self.final_proj(desc1)
         _, _, d = mdesc0.shape
         mdesc0, mdesc1 = mdesc0 / d**.25, mdesc1 / d**.25
@@ -327,19 +332,26 @@ def filter_matches(scores: torch.Tensor, th: float):
 class MLP_module(nn.Module):
     def __init__(self):
         super().__init__()
-        dim = 3
+        dim = 256
         n_layers = 1
+        
         self.MLP = MLP(in_features=256, out_features=3, num_cells=[128, 64, 32, 16])
+        
         self.log_assignment = nn.ModuleList(
             [MatchAssignment(dim) for _ in range(n_layers)])
+        
         self.MLP_de = MLP(in_features=3, out_features=256, num_cells=[16, 32, 64, 128])
+
+
     def forward(self, desc0: torch.Tensor, desc1: torch.Tensor):
 
         desc0_mlp = self.MLP(desc0)
         desc1_mlp = self.MLP(desc1)
-        scores_mlp, _, scores_no = self.log_assignment[0](desc0_mlp, desc1_mlp)
+        # scores_mlp, _, scores_no = self.log_assignment[0](desc0_mlp, desc1_mlp)
         desc0_back = self.MLP_de(desc0_mlp)
         desc1_back = self.MLP_de(desc1_mlp)
+
+        scores_mlp, _, scores_no = self.log_assignment[0](desc0_back, desc1_back)
         return scores_no, desc0_back, desc1_back
 
 class LightGlue(nn.Module):
@@ -379,7 +391,7 @@ class LightGlue(nn.Module):
 
     def __init__(self, features='superpoint', **conf) -> None:
         super().__init__()
-        PATH = '/mnt/home_6T/public/weien/MLP_checkpoint/model_20230918_185233_270'
+        PATH = '/mnt/home_6T/public/weien/MLP_checkpoint/model_20230925_214348_185'
         self.MLP = MLP_module()
         self.MLP.load_state_dict(torch.load(PATH))
         self.MLP.eval()
@@ -485,8 +497,11 @@ class LightGlue(nn.Module):
         kpts0 = normalize_keypoints(kpts0, size0).clone()
         kpts1 = normalize_keypoints(kpts1, size1).clone()
 
-        desc0 = data0['descriptors'].detach().contiguous()
-        desc1 = data1['descriptors'].detach().contiguous()
+        desc0_k = data0['descriptors'].detach().contiguous()
+        desc1_k = data1['descriptors'].detach().contiguous()
+        desc0 = data0['descriptor_all'].detach().contiguous()
+        desc1 = data1['descriptor_all'].detach().contiguous()
+
 
         assert desc0.shape[-1] == self.conf.input_dim
         assert desc1.shape[-1] == self.conf.input_dim
@@ -551,7 +566,7 @@ class LightGlue(nn.Module):
         
         desc0, desc1 = desc0[..., :m, :], desc1[..., :n, :]
         # Train / Test flag
-        Train = True
+        Train = False
         if Train:
             desc0_out = desc0.clone() 
             desc1_out = desc1.clone()
