@@ -497,10 +497,10 @@ class LightGlue(nn.Module):
         kpts0 = normalize_keypoints(kpts0, size0).clone()
         kpts1 = normalize_keypoints(kpts1, size1).clone()
 
-        desc0_k = data0['descriptors'].detach().contiguous()
-        desc1_k = data1['descriptors'].detach().contiguous()
-        desc0 = data0['descriptor_all'].detach().contiguous()
-        desc1 = data1['descriptor_all'].detach().contiguous()
+        desc0 = data0['descriptors'].detach().contiguous()
+        desc1 = data1['descriptors'].detach().contiguous()
+        # desc0 = data0['descriptor_all'].detach().contiguous()
+        # desc1 = data1['descriptor_all'].detach().contiguous()
 
 
         assert desc0.shape[-1] == self.conf.input_dim
