@@ -1,0 +1,35 @@
+Location(meter): (x,y,z)=(23.5,3.3,1.4)
+Rotation: (x,y,z)=(90,0,105)
+CameraScale=0.010825
+
+
+23.5-21.17=2.33
+3.3-2.45=0.85
+
+
+
+
+
+
+
+
+
+
+
+
+vector = np.array([3, 4])
+
+# Angle of rotation (in radians)
+angle = np.pi / 2  # 90 degrees
+
+# Rotation matrix for counterclockwise rotation
+rotation_matrix = np.array([[np.cos(angle), -np.sin(angle)],
+                            [np.sin(angle), np.cos(angle)]])
+
+# Apply rotation
+rotated_vector = np.dot(rotation_matrix, vector)
+
+
+
+
+

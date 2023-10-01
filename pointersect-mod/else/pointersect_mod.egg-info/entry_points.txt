@@ -1,0 +1,3 @@
+[console_scripts]
+pointersect_full = pointersect.inference.main:main_full
+pointersect_mod = pointersect.inference.main:main_pcd

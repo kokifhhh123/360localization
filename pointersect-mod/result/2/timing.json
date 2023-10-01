@@ -1,0 +1,9 @@
+{
+  "total_time": {
+    "ours-/home/koki/anaconda3/envs/pointersect/lib/python3.7/site-packages/pointersect/checkpoint/epoch700.pth": 5.868918242165819,
+    "vis. splatting (1)": 4.782838399987668
+  },
+  "num_images": 1,
+  "width_px": 1024,
+  "height_px": 512
+}

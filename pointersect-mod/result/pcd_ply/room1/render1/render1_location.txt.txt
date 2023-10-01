@@ -1,0 +1,3 @@
+Location(meter): (x,y,z)=(23,2.4,1.4)
+Rotation: (x,y,z)=(90,0,45)
+CameraScale=0.010825
