@@ -15,9 +15,11 @@ matcher = LightGlue(features='superpoint').eval().to(device)
 
 image0 = load_image(images / '1.13.png')
 image1 = load_image(images / '1.14.png')
+
 feats0 = extractor.extract(image0.to(device))
 feats1 = extractor.extract(image1.to(device))
 matches01 = matcher({'image0': feats0, 'image1': feats1})
+
 feats0, feats1, matches01 = [rbd(x) for x in [feats0, feats1, matches01]]  # remove batch dimension
 
 kpts0, kpts1, matches = feats0['keypoints'], feats1['keypoints'], matches01['matches']

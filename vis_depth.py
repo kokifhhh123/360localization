@@ -2,7 +2,7 @@ import json
 import numpy as np
 import open3d as o3d
 from imageio import imread
-
+from PIL import Image
 
 def get_uni_sphere_xyz(H, W):
     j, i = np.meshgrid(np.arange(H), np.arange(W), indexing='ij')
@@ -35,10 +35,19 @@ if __name__ == '__main__':
     path = '/mnt/home_6T/public/koki/gibson_tiny/Collierville/pano/'
     img_path = path + 'rgb/point_p' + '000024' + '_view_equirectangular_domain_rgb.png'
     depth_path = path + 'mist/point_p' + '000024' + '_view_equirectangular_domain_mist.png'
-    
+    # path = 
     # Reading rgb-d
-    rgb = imread(img_path)
+    rgb = imread('/home/koki/Localization/m0_image_1.png')
+    # rgb = rgb.reshape()
+    print(rgb.shape)
+    # depth = imread(depth_path)
+    # depth = Image.fromarray(depth).resize((1024,512))
+    # depth = np.array(depth)
+
     depth = imread(depth_path)[...,None].astype(np.float32) * args.scale
+    print(depth.shape)
+    # depth = depth.
+    
 
     # Project to 3d
     H, W = rgb.shape[:2]

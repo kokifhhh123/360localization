@@ -499,8 +499,8 @@ class LightGlue(nn.Module):
 
         desc0 = data0['descriptors'].detach().contiguous()
         desc1 = data1['descriptors'].detach().contiguous()
-        # desc0 = data0['descriptor_all'].detach().contiguous()
-        # desc1 = data1['descriptor_all'].detach().contiguous()
+        desc0_all = data0['descriptor_all'].detach().contiguous()
+        desc1_all = data1['descriptor_all'].detach().contiguous()
 
 
         assert desc0.shape[-1] == self.conf.input_dim
